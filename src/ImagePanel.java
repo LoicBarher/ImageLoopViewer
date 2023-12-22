@@ -144,7 +144,7 @@ class ImagePanel extends JPanel {
         }
        
         currentImageIndex = -1; // Start before the first image
-        startButton.setEnabled(true); // There are images to show
+        //startButton.setEnabled(true); // There are images to show
 
         System.out.println("Number of images loaded: " + (imageFiles != null ? imageFiles.length : "None"));
     }
@@ -216,29 +216,26 @@ class ImagePanel extends JPanel {
     }
 
     private void handleNoImagesAvailable() {
-        stopSlideshow();
         imageLabel.setIcon(null);
         imageLabel.setText("No images available in the selected directory.");
-        updateControlsForNoImages();
     }
 
     private void handleOneImageAvailable() {
-        stopSlideshow();
         imageLabel.setIcon(null);
         imageLabel.setText("Not enough image available in the selected directory.");
-        updateControlsForNoImages();
     }
 
-    private void updateControlsForNoImages() {
+    /*private void updateControlsForNoImages() {
         // Mettre à jour les contrôles de l'interface utilisateur
         startButton.setEnabled(false);
         stopButton.setEnabled(false);
         // Autres mises à jour de l'interface utilisateur si nécessaire
-    }
+    }*/
 
     private void stopSlideshow() {
         if (timer != null && timer.isRunning()) {
             timer.stop();
+            updateControls();
         }
     }
 

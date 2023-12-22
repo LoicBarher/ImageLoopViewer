@@ -10,7 +10,7 @@ ImageLoopViewer is a Java application that allows users to view a slideshow of i
 - Dynamic updates when images are added, removed, or modified in the folder.
 
 ## Prerequisites
-- Java Runtime Environment (JRE) version 8 or newer.
+- Java Runtime Environment (JRE) version 17 or newer.
 
 ## Installation
 Download the `ImageLoopViewer.jar` file and execute it on your machine.

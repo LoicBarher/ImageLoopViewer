@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
+//import java.util.Arrays;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
@@ -139,23 +139,50 @@ class ImagePanel extends JPanel {
             statusLabel.setText("Folder does not contain any supported images.");
             imageLabel.setText("Folder does not contain any supported images.");
             startButton.setEnabled(false);
+            handleNoImagesAvailable();
             return;
         }
-
-        Arrays.sort(imageFiles);
+       
         currentImageIndex = -1; // Start before the first image
         startButton.setEnabled(true); // There are images to show
+
+        System.out.println("Number of images loaded: " + (imageFiles != null ? imageFiles.length : "None"));
     }
 
     private void showNextImage() {
         if (imageFiles == null || imageFiles.length == 0) {
-            // No images to show, so display a message instead
-            imageLabel.setIcon(null);
-            imageLabel.setText("Folder does not contain any pictures.");
+            handleNoImagesAvailable();
+            return;
+        } else if (imageFiles.length == 1) {
+            handleOneImageAvailable();
             return;
         }
-            
-        File imageFile = imageFiles[++currentImageIndex % imageFiles.length];
+        
+        // Si le fichier image n'existe pas, rechargez les images avant de continuer.
+        currentImageIndex = (currentImageIndex + 1) % imageFiles.length;
+        File imageFile = imageFiles[currentImageIndex];
+
+        if (!imageFile.exists()) {
+            loadImages();
+            if (imageFiles == null || imageFiles.length == 0) {
+                handleNoImagesAvailable();
+                return;
+            } else {
+                // Si des images sont toujours présentes, montrez la prochaine image disponible.
+                imageFiles = directory.listFiles((dir, name) -> {
+                    String lowerName = name.toLowerCase();
+                    return lowerName.endsWith(".png") || lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg");
+                    });
+                    if (imageFiles.length == 0) {
+                        handleNoImagesAvailable();
+                        return;
+                    } else {
+                        showNextImage();
+                    return;
+                }
+            }
+        }
+
         try {
             BufferedImage img = ImageIO.read(imageFile);
             ImageIcon imageIcon = new ImageIcon(img);
@@ -163,11 +190,12 @@ class ImagePanel extends JPanel {
             imageLabel.setIcon(new ImageIcon(scaledImage));
             imageLabel.setText(""); // Clear any previous text
         } catch (IOException e) {
-            // Handle unreadable image
-            JOptionPane.showMessageDialog(this, "Could not read image: " + imageFile.getName());
-            // Skip to next image
+            // Si une erreur de lecture se produit, affichez un message d'erreur et passez à l'image suivante
+            //JOptionPane.showMessageDialog(this, "Could not read image: " + imageFile.getName(), "Image Read Error", JOptionPane.ERROR_MESSAGE);
+            //currentImageIndex++; // Passez à l'image suivante
             showNextImage();
         }
+        System.out.println("Current image index: " + currentImageIndex + " of " + (imageFiles != null ? imageFiles.length : "None"));
     }
 
     public void startSlideshow() {
@@ -187,10 +215,30 @@ class ImagePanel extends JPanel {
         }
     }
 
-    public void stopSlideshow() {
+    private void handleNoImagesAvailable() {
+        stopSlideshow();
+        imageLabel.setIcon(null);
+        imageLabel.setText("No images available in the selected directory.");
+        updateControlsForNoImages();
+    }
+
+    private void handleOneImageAvailable() {
+        stopSlideshow();
+        imageLabel.setIcon(null);
+        imageLabel.setText("Not enough image available in the selected directory.");
+        updateControlsForNoImages();
+    }
+
+    private void updateControlsForNoImages() {
+        // Mettre à jour les contrôles de l'interface utilisateur
+        startButton.setEnabled(false);
+        stopButton.setEnabled(false);
+        // Autres mises à jour de l'interface utilisateur si nécessaire
+    }
+
+    private void stopSlideshow() {
         if (timer != null && timer.isRunning()) {
             timer.stop();
-            updateControls();
         }
     }
 

@@ -1,5 +1,22 @@
+# Compiled Java files
+*.class
+
+# IDE and editor directories
+/.vscode/
+/.idea/
+
+# Build directories
 bin/
 out/
-.vscode/
-.idea/
-*.class
+
+# Exclude all files and folders in the jdk directory except bin and lib
+/jdk/*
+!/jdk/bin/
+!/jdk/lib/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# JAR file that should be included in your repository
+!/ImageLoopViewer.jar

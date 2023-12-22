@@ -9,17 +9,19 @@ ImageLoopViewer is a Java application that allows users to view a slideshow of i
 - Automatic slide show with adjustable intervals.
 - Dynamic updates when images are added, removed, or modified in the folder.
 
-## Prerequisites
-- Java Runtime Environment (JRE) version 8 or newer.
+## Requirements
+- This application requires Java Runtime Environment (JRE) version 17 or higher to run. If you do not have the correct version of Java installed, you can use the bundled JDK version by running the provided batch file on Windows.
 
 ## Installation
-Download the `ImageLoopViewer.jar` file and execute it on your machine.
+Download the `ImageLoopViewer.jar` file from the [Releases](link_to_releases) page or directly from the repository if you are a developer or want the latest version.
 
-## Usage
-Launch the application by double-clicking the JAR file or through the command line:
+### On Windows
+If you do not have JRE version 17 or higher installed, or you prefer not to update your Java installation, you can run the application using the included JDK by double-clicking the `RunImageLoopViewer.bat` file in the repository root. This batch file will use the bundled JDK to run the application, ensuring compatibility regardless of your system's installed Java version.
+
+Otherwise, you can directly double-click on the .jar file.
 
 ```bash
-java -jar ImageLoopViewer.jar
+RunImageLoopViewer.bat
 ```
 
 ## Technical Overview
